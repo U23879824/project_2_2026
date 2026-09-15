@@ -53,3 +53,28 @@ print(tier_counts)
 #5.1. It doesn't change much. The original split was {'A': 3, 'B': 3, 'C': 2}, while the new split is {'A': 4, 'B': 4, 'C': 2}. 
 #5.2. Tier A decreases by 1, tier B decreases by 1 and tuer C increases by 2.
 #5.3. 
+def classify_inventory(skus):
+
+    for item in skus:
+        item["value"] = item["demand"] * item["cost"]
+    skus_sorted = sorted(skus, key=lambda item: item["value"], reverse=True)    
+
+    total_value = sum(item["value"] for item in skus_sorted)
+    running_total = 0
+
+    for item in skus_sorted:
+        running_total += item["value"]
+        item["cum_pct"] = (running_total / total_value) * 100
+
+        if item["cum_pct"] <= 70:
+            item["tier"] = "A"
+        elif item["cum_pct"] <= 90:
+            item["tier"] = "B"
+        else:
+            item["tier"] = "C"
+    return skus_sorted
+    
+    
+
+                
+
